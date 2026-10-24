@@ -32,7 +32,7 @@ export const About: React.FC = () => {
         scrollTrigger: {
           trigger: headerRef.current,
           start: 'top 82%',
-          toggleActions: 'play reverse play reverse',
+          toggleActions: 'play none none reset',
         },
       });
 
@@ -45,7 +45,7 @@ export const About: React.FC = () => {
         scrollTrigger: {
           trigger: bioRef.current,
           start: 'top 82%',
-          toggleActions: 'play reverse play reverse',
+          toggleActions: 'play none none reset',
         },
       });
 
@@ -61,7 +61,7 @@ export const About: React.FC = () => {
           scrollTrigger: {
             trigger: eduRef.current,
             start: 'top 80%',
-            toggleActions: 'play reverse play reverse',
+            toggleActions: 'play none none reset',
           },
         });
       }
@@ -78,7 +78,7 @@ export const About: React.FC = () => {
           scrollTrigger: {
             trigger: skillsRef.current,
             start: 'top 80%',
-            toggleActions: 'play reverse play reverse',
+            toggleActions: 'play none none reset',
           },
         });
       }
@@ -95,7 +95,7 @@ export const About: React.FC = () => {
           scrollTrigger: {
             trigger: expRef.current,
             start: 'top 80%',
-            toggleActions: 'play reverse play reverse',
+            toggleActions: 'play none none reset',
           },
         });
       }
@@ -113,7 +113,7 @@ export const About: React.FC = () => {
           scrollTrigger: {
             trigger: achRef.current,
             start: 'top 80%',
-            toggleActions: 'play reverse play reverse',
+            toggleActions: 'play none none reset',
           },
         });
       }

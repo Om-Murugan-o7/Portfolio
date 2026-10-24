@@ -569,3 +569,81 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .project-apk-download small { display: block; font-size: 10px; color: #aaa; margin-top: 3px; }
 .project-apk-download + a { display: flex; align-items: center; justify-content: center; gap: 15px; border: 1px solid #888; border-radius: 4px; padding: 10px; color: white; text-decoration: none; font-size: 14px; }
 .project-apk-download + a:hover { background: #ffffff18; }
+
+/* Touch layouts: readable type, comfortable targets, and stacked content. */
+@media (max-width: 767px) {
+  .portfolio-nav { height: 72px; background: #000e; backdrop-filter: blur(12px); }
+  .home-nav-container { width: 90%; }
+  #mobile-menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; }
+  .mobile-navigation { top: 72px; padding: 12px 5% 20px; max-height: calc(100dvh - 72px); overflow-y: auto; }
+  .mobile-nav-link { min-height: 48px; padding: 12px 16px; }
+  section[id] { scroll-margin-top: 72px; }
+  .home-stage { padding-top: 104px; }
+  .home-name { margin-left: -2px; font-size: 13.2vw; line-height: .9; }
+  .home-role { white-space: normal; font-size: 12px; line-height: 1.6; letter-spacing: .1em; max-width: 340px; margin-top: 16px; }
+  .home-bio { font-size: 16px; line-height: 1.6; }
+  .home-connect { min-height: 48px; }
+  .home-socials { gap: 16px; margin-top: 18px; }
+  .home-socials a, .home-socials button { width: 46px; height: 46px; }
+  .home-stats > div, .home-stats > div + div { padding-left: 12px; }
+  .home-stats span { font-size: 11px; }
+  .home-visual { width: 112%; margin: 8px -6% 0; }
+  .home-bottom { align-items: flex-start; gap: 20px; padding-block: 20px; }
+  .home-contact-links { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+  .home-contact-links a { min-height: 44px; font-size: 12px; gap: 10px; overflow-wrap: anywhere; }
+  .home-contact-links a:last-child { grid-column: 1 / -1; }
+  .home-contact-links svg { width: 22px; height: 22px; }
+  .home-motto { white-space: normal; font-size: 9px; line-height: 1.6; letter-spacing: .1em; }
+  .home-motto > span { flex-shrink: 0; width: 22px; }
+  .about-reference { padding-top: 48px; }
+  .about-layout { gap: 28px; }
+  .about-intro, .about-panels, .about-panel, .contact-layout > * { min-width: 0; }
+  .about-tags > span { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .about-skills .about-tags > span { font-size: 13px; }
+  .about-panel-body { margin-left: 0; margin-top: 18px; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+  .about-earlier { font-size: 13px; }
+  .about-earlier summary { min-height: 44px; padding-block: 10px; }
+  .about-company { font-size: 13px; }
+  .about-connect { min-height: 48px; margin-top: 22px; }
+  .about-achievement-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .about-achievement-grid h4 { font-size: 12px; overflow-wrap: anywhere; }
+  .about-achievement-grid p { font-size: 14px; }
+  .projects-controls button { width: 44px; height: 44px; }
+  .projects-track { gap: 16px; scroll-padding-inline: 0; }
+  .project-showcase-card { flex-basis: 92%; }
+  .project-summary { font-size: 16px; line-height: 1.55; }
+  .project-tech > span { font-size: 12px; max-width: 100%; overflow-wrap: anywhere; }
+  .project-actions > a:first-child, .project-download-button, .project-apk-download + a { min-height: 48px; }
+  .project-source { min-height: 44px; padding-block: 12px; font-size: 13px; }
+  .project-apk-download p { font-size: 12px; }
+  .project-apk-download small { font-size: 11px; }
+  .contact-layout { grid-template-columns: minmax(0,1fr); gap: 28px; }
+  .contact-description { font-size: 16px; line-height: 1.6; }
+  .contact-title { font-size: 12vw; }
+  .contact-fields input, .contact-fields textarea { font-size: 16px; padding: 12px; }
+  .contact-fields input { height: 48px; }
+  .contact-fields textarea { min-height: 145px; }
+  .contact-form-heading { gap: 12px; }
+  .contact-form-heading > svg { width: 30px; height: 30px; }
+  .contact-form-heading p { font-size: 14px; line-height: 1.5; }
+  .contact-submit { min-height: 50px; }
+  .contact-aside { display: flex; }
+  .contact-corner-panel { padding: 22px 18px; }
+  .contact-together { gap: 26px 16px; margin-top: 25px; }
+  .contact-together > div { padding-left: 22px; }
+  footer { padding-block: 24px; }
+  footer .site-container { gap: 20px; }
+  footer a, footer button { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+}
+@media (max-width: 359px) {
+  .home-contact-links { grid-template-columns: 1fr; }
+  .about-panel { padding: 20px 16px; }
+  .about-reference h3 { font-size: 14px; gap: 12px; }
+  .contact-form { padding: 24px 18px; }
+  .contact-card { gap: 10px; padding: 14px 12px; }
+  .contact-card-copy > span { font-size: 13px; }
+  .contact-card-arrow { width: 20px; }
+  .contact-together { grid-template-columns: 1fr; }
+  .contact-stats { gap: 8px; }
+  .contact-stats .about-panel { padding: 13px 10px; }
+}

@@ -39,9 +39,9 @@ export const AnimatedBackground: React.FC = () => {
     setupCanvasSize();
 
     const isMobile = displayW < 768;
-    const nodeCount = isMobile ? 80 : 210; // Organic dense network clusters
-    const distantParticleCount = isMobile ? 90 : 200;
-    const fgParticleCount = isMobile ? 30 : 60;
+    const nodeCount = isMobile ? 48 : 210; // Organic dense network clusters
+    const distantParticleCount = isMobile ? 50 : 200;
+    const fgParticleCount = isMobile ? 16 : 60;
 
     // LAYER 1: Distant Background Particles (Monochrome)
     const distantParticles = Array.from({ length: distantParticleCount }, () => ({

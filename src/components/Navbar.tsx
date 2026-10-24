@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { Menu, X } from 'lucide-react';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { portfolioData } from '../data/portfolioData';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -23,6 +24,32 @@ export const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+
+  const prefersReducedMotion = useReducedMotion();
+
+  const scrollToSection = useCallback((id: string, closeMobile = true) => {
+    if (closeMobile) setMobileMenuOpen(false);
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    gsap.to(window, {
+      duration: prefersReducedMotion ? 0 : 1.1,
+      scrollTo: { y: target, offsetY: document.querySelector('.portfolio-nav')?.getBoundingClientRect().height ?? 80 },
+      ease: 'power3.inOut',
+    });
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+        document.getElementById('mobile-menu-toggle')?.focus();
+      }
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     if (window.location.hash) {
@@ -67,19 +94,8 @@ export const Navbar: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
       triggers.forEach((t) => t.kill());
     };
-  }, []);
+  }, [scrollToSection]);
 
-  const scrollToSection = (id: string, closeMobile = true) => {
-    if (closeMobile) setMobileMenuOpen(false);
-    const target = document.getElementById(id);
-    if (!target) return;
-
-    gsap.to(window, {
-      duration: 1.1,
-      scrollTo: { y: target, offsetY: 80 },
-      ease: 'power3.inOut',
-    });
-  };
 
   return (
     <header
@@ -127,7 +143,10 @@ export const Navbar: React.FC = () => {
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden text-zinc-300 hover:text-white p-2 focus:outline-none"
+          id="mobile-menu-toggle"
           aria-label="Toggle Navigation Menu"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -135,7 +154,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[80px] bg-black/95 backdrop-blur-xl border-b border-zinc-800 px-6 py-6 shadow-2xl flex flex-col space-y-4 animate-fadeIn">
+        <nav id="mobile-navigation" aria-label="Mobile Navigation" className="mobile-navigation md:hidden fixed inset-x-0 top-[80px] bg-black/95 backdrop-blur-xl border-b border-zinc-800 px-6 py-6 shadow-2xl flex flex-col space-y-4 animate-fadeIn">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
@@ -154,7 +173,7 @@ export const Navbar: React.FC = () => {
               </button>
             );
           })}
-        </div>
+        </nav>
       )}
     </header>
   );
