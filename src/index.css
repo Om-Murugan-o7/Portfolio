@@ -561,3 +561,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .project-workflow-art { display: grid; place-items: center; }
 .project-workflow-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+.project-apk-download { margin-bottom: 12px; }
+.project-download-button { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; padding: 11px; border: 1px solid white; border-radius: 4px; color: #000; background: #eee; text-decoration: none; font-size: 15px; letter-spacing: .04em; }
+.project-download-button:hover { background: #ccc; }
+.project-apk-download p { font-size: 11px; color: #ccc; margin-top: 8px; }
+.project-apk-download small { display: block; font-size: 10px; color: #aaa; margin-top: 3px; }
+.project-apk-download + a { display: flex; align-items: center; justify-content: center; gap: 15px; border: 1px solid #888; border-radius: 4px; padding: 10px; color: white; text-decoration: none; font-size: 14px; }
+.project-apk-download + a:hover { background: #ffffff18; }

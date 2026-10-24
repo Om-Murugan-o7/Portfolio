@@ -111,7 +111,7 @@ export const Projects: React.FC = () => {
           <h3>{project.title}</h3>
           <p className="project-summary">{project.description}</p>
           <div className="project-tech">{project.techStack.map(tech => <span key={tech}>{tech}</span>)}</div>
-          <div className="project-actions"><a href={project.liveUrl || project.githubUrl} target="_blank" rel="noopener noreferrer">{project.liveUrl ? 'VIEW LIVE' : 'VIEW CODE'}<ArrowRight size={20} /></a>{project.liveUrl && <a className="project-source" href={project.githubUrl} target="_blank" rel="noopener noreferrer">Source code ↗</a>}</div>
+          <div className="project-actions">{project.downloadUrl && <div className="project-apk-download"><a className="project-download-button" href={project.downloadUrl}>DOWNLOAD APK <span aria-hidden="true">↓</span></a><p>{project.downloadInfo}</p><small>Development build</small></div>}<a href={project.liveUrl || project.githubUrl} target="_blank" rel="noopener noreferrer">{project.liveUrl ? 'VIEW LIVE' : 'VIEW CODE'}<ArrowRight size={20} /></a>{project.liveUrl && <a className="project-source" href={project.githubUrl} target="_blank" rel="noopener noreferrer">Source code ↗</a>}</div>
         </article>)}
       </div>
       <div className="projects-bottom"><p><span />● MORE TO COME ●<span /></p><p>BUILDING TODAY FOR A SMARTER TOMORROW</p></div>

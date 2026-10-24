@@ -13,7 +13,9 @@ export const githubProjects = [
     "preview": "health",
     "githubUrl": "https://github.com/Om-Murugan-o7/AquaSwasthya---IoT-Water-Quality-Monitoring",
     "liveUrl": null,
-    "fork": false
+    "fork": false,
+    "downloadUrl": null,
+    "downloadInfo": null
   },
   {
     "id": 1290024692,
@@ -28,7 +30,9 @@ export const githubProjects = [
     "preview": "community",
     "githubUrl": "https://github.com/Om-Murugan-o7/ComHub",
     "liveUrl": "https://comhub.ommurugan.engineer/",
-    "fork": false
+    "fork": false,
+    "downloadUrl": null,
+    "downloadInfo": null
   },
   {
     "id": 1281956310,
@@ -44,7 +48,9 @@ export const githubProjects = [
     "preview": "security",
     "githubUrl": "https://github.com/Om-Murugan-o7/SecureAuth",
     "liveUrl": "https://secrueauth.ommurugan.engineer/",
-    "fork": false
+    "fork": false,
+    "downloadUrl": null,
+    "downloadInfo": null
   },
   {
     "id": 1430140787,
@@ -59,7 +65,9 @@ export const githubProjects = [
     "preview": "finance",
     "githubUrl": "https://github.com/Om-Murugan-o7/PocketTrack",
     "liveUrl": null,
-    "fork": false
+    "fork": false,
+    "downloadUrl": "https://github.com/Om-Murugan-o7/PocketTrack/releases/latest/download/PocketTrack.apk",
+    "downloadInfo": "v1.0 \u00b7 19.5 MB \u00b7 Android 8.0+"
   },
   {
     "id": 1208375216,
@@ -72,6 +80,8 @@ export const githubProjects = [
     "preview": "workflow",
     "githubUrl": "https://github.com/Om-Murugan-o7/WORK-FLOW",
     "liveUrl": null,
-    "fork": false
+    "fork": false,
+    "downloadUrl": null,
+    "downloadInfo": null
   }
 ];
