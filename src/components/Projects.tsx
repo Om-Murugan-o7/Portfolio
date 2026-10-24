@@ -1,17 +1,51 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Layers, Activity, ShieldCheck, MessageSquare, Eye, ArrowUpRight } from 'lucide-react';
-import { portfolioData, type Project } from '../data/portfolioData';
+import { Activity, Eye, ShieldCheck, MessageSquare, Layers, ArrowRight } from 'lucide-react';
+import projectReference from '../assets/project-reference.png';
+import workflowPreview from '../assets/workflow-preview.png';
+import pockettrackPreview from '../assets/pockettrack-preview.png';
+import { githubProjects } from '../data/githubProjects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { GithubIcon } from './SocialIcons';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const referencePositions: Record<string, string> = { health: '6.7%', community: '64.8%', security: '93.9%' };
+
+const ProjectPreview: React.FC<{ kind: string }> = ({ kind }) => kind === 'workflow' ? (
+  <div className="project-reference-art project-workflow-art"><img src={workflowPreview} alt="Work Flow task scheduling dashboard with monochrome orbit outlines" loading="lazy" /></div>
+) : kind === 'finance' ? (
+  <div className="project-reference-art project-workflow-art"><img src={pockettrackPreview} alt="PocketTrack Android app concept with account balances, transactions, and spending reports" loading="lazy" /></div>
+) : referencePositions[kind] ? (
+  <div className="project-reference-art" aria-hidden="true" style={{ backgroundImage: `url(${projectReference})`, backgroundPosition: `${referencePositions[kind]} 39.3%` }} />
+) : (
+  <div className={`project-art project-art-${kind}`} aria-hidden="true">
+    <div className="project-orbit project-orbit-one" /><div className="project-orbit project-orbit-two" />
+    <div className="project-mini-app">
+      <div className="project-mini-toolbar"><i /><i /><i /><span>{kind === 'community' ? 'Community Hub' : kind === 'security' ? 'Secure workspace' : kind === 'finance' ? 'PocketTrack' : 'Engineering workspace'}</span></div>
+      {kind === 'health' ? <div className="project-mini-health"><Activity /><div><span>Community health</span><strong>98.6°</strong><div className="project-chart">▁ ▃ ▂ ▆ ▄ ▇ ▃ ▅</div><small>EARLY WARNING · MONITORING</small></div></div>
+      : kind === 'vision' ? <div className="project-mini-vision"><Eye /><strong>PathLens</strong><span>Spatial awareness.<br />Greater independence.</span><div className="project-scan" /></div>
+      : kind === 'community' ? <div className="project-mini-community"><div><MessageSquare /><strong>Ideas.<br />People.<br />Impact.</strong><small>A space to connect.</small></div><ul><li># discussions</li><li># community</li><li># projects</li><li># resources</li></ul></div>
+      : kind === 'security' ? <div className="project-mini-security"><ShieldCheck /><div><strong>Sign in</strong><span>Email</span><span>Password</span><b>Continue →</b></div></div>
+      : kind === 'finance' ? <div className="project-mini-finance"><small>YOUR ACCOUNTS</small><strong>PocketTrack</strong><div className="project-chart">▁ ▃ ▅ ▂ ▆ ▄ ▇</div><span>Income · Expenses · Reports</span></div>
+      : <div className="project-mini-generic"><Layers /><strong>{kind === 'workflow' ? 'Plan. Focus. Build.' : 'Explore. Analyze. Create.'}</strong><span>Tools for real-world problems</span><div className="project-mini-lines"><i /><i /><i /></div></div>}
+    </div>
+  </div>
+);
 
 export const Projects: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
   const cardsContainerRef = useRef<HTMLDivElement | null>(null);
+  const [position, setPosition] = useState({ start: true, end: false });
+  const updatePosition = () => {
+    const row = cardsContainerRef.current;
+    if (row) setPosition({ start: row.scrollLeft < 2, end: row.scrollLeft + row.clientWidth >= row.scrollWidth - 2 });
+  };
+  const move = (direction: number) => {
+    const row = cardsContainerRef.current;
+    if (row) row.scrollBy({ left: direction * (row.firstElementChild?.getBoundingClientRect().width ?? row.clientWidth) + direction * 24, behavior: prefersReducedMotion ? 'instant' : 'smooth' });
+  };
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -35,209 +69,52 @@ export const Projects: React.FC = () => {
         }
       );
 
-      // 2. Safe Project Card Entry & Reveal Timelines (Prevents permanently hidden Project 01)
+      // 2. Grid Cards Entry Animation
       if (cardsContainerRef.current) {
         const cards = cardsContainerRef.current.querySelectorAll('.project-showcase-card');
-
-        cards.forEach((card) => {
-          const contentLeft = card.querySelector('.project-content-left');
-          const previewRight = card.querySelector('.project-preview-right');
-          const techBadges = card.querySelectorAll('.tech-badge');
-
-          const cardTl = gsap.timeline({
+        gsap.fromTo(
+          cards,
+          { opacity: 0.2, y: 35 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: 'power3.out',
             scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              end: 'top 42%',
-              scrub: 0.6,
+              trigger: cardsContainerRef.current,
+              start: 'top 80%',
+              toggleActions: 'play reverse play reverse',
             },
-          });
-
-          cardTl
-            .fromTo(
-              card,
-              { opacity: 0.25, y: 45 },
-              { opacity: 1, y: 0, ease: 'power3.out' }
-            )
-            .fromTo(
-              contentLeft,
-              { opacity: 0.3, y: 30 },
-              { opacity: 1, y: 0, ease: 'power3.out' },
-              '<'
-            )
-            .fromTo(
-              previewRight,
-              { opacity: 0.3, scale: 0.94, y: 25 },
-              { opacity: 1, scale: 1, y: 0, ease: 'power3.out' },
-              '<'
-            )
-            .fromTo(
-              techBadges,
-              { opacity: 0.4, y: 15 },
-              { opacity: 1, y: 0, stagger: 0.04, ease: 'power3.out' },
-              '-=0.2'
-            );
-        });
+          }
+        );
       }
     }, sectionRef);
 
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
-  // Dynamic Monochrome Project Visual Icon Selector
-  const renderProjectIcon = (id: string) => {
-    switch (id) {
-      case 'proj-1':
-        return <Activity className="w-9 h-9 text-white" />;
-      case 'proj-2':
-        return <Eye className="w-9 h-9 text-white" />;
-      case 'proj-3':
-        return <MessageSquare className="w-9 h-9 text-white" />;
-      case 'proj-4':
-        return <ShieldCheck className="w-9 h-9 text-white" />;
-      default:
-        return <Layers className="w-9 h-9 text-white" />;
-    }
-  };
-
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="relative min-h-[300vh] py-28 md:py-44 lg:py-60 z-10"
-    >
-      <div className="site-container space-y-28 md:space-y-40 lg:space-y-48">
-        {/* Section Header (Label -> Heading spacing 16px, Heading -> First Card spacing 60px) */}
-        <div ref={headerRef} className="space-y-4 mb-4 md:mb-12">
-          <div className="flex items-center space-x-3">
-            <span className="mono-tag text-white font-semibold">02 //</span>
-            <span className="mono-tag text-zinc-400">FEATURED ENGINEERING</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05] font-display">
-            <span className="monochrome-gradient-text">SELECTED PROJECTS</span>
-          </h2>
-        </div>
-
-        {/* Showcase Sequence with Ample Purposeful Vertical Breathing Room */}
-        <div ref={cardsContainerRef} className="space-y-44 md:space-y-64 lg:space-y-72 pt-2">
-          {portfolioData.projects.map((project: Project) => (
-            <div
-              key={project.id}
-              className="project-showcase-card glass-card p-8 sm:p-10 md:p-12 lg:p-13 border border-zinc-800 bg-zinc-950/80 relative overflow-hidden shadow-2xl group hover:border-zinc-600 transition-colors duration-300"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-                {/* LEFT COLUMN: Project Details (Explicit 10px internal left spacing) */}
-                <div className="project-content-left lg:col-span-7 space-y-6 pl-[10px]">
-                  <div className="flex items-center space-x-4">
-                    <span className="font-mono font-extrabold text-3xl sm:text-4xl text-white tracking-tighter">
-                      {project.number}
-                    </span>
-                    <span className="h-[1px] w-12 bg-zinc-700" />
-                    <span className="mono-tag text-xs bg-zinc-900 border border-zinc-800 px-3.5 py-1.5 rounded-full text-zinc-300 tracking-wider">
-                      {project.category}
-                    </span>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight group-hover:text-zinc-100 transition-colors duration-300 font-display">
-                      {project.title}
-                    </h3>
-                    <p className="font-mono text-xs sm:text-sm text-zinc-400 font-medium tracking-wide">
-                      {project.tagline}
-                    </p>
-                  </div>
-
-                  <p className="text-zinc-300 text-sm md:text-base leading-[1.75] font-light">
-                    {project.description}
-                  </p>
-
-                  {/* Tech Stack Badges */}
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {project.techStack.map((tech, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="tech-badge font-mono text-xs px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors duration-200"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Live Project Action Link */}
-                  {(project.liveUrl || project.githubUrl) && (
-                    <div className="flex flex-wrap items-center gap-6 pt-3">
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center space-x-2 text-xs sm:text-sm font-semibold tracking-wider text-white hover:text-zinc-300 transition-colors duration-200"
-                        >
-                          <span>VIEW LIVE →</span>
-                        </a>
-                      )}
-
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center space-x-2 text-xs sm:text-sm font-semibold tracking-wider text-zinc-400 hover:text-white transition-colors duration-200"
-                        >
-                          <GithubIcon className="w-4 h-4" />
-                          <span>GITHUB REPO →</span>
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* RIGHT COLUMN: Monochrome Architecture Preview Box (Inner preview scales on hover, outer stays fixed) */}
-                <div className="project-preview-right lg:col-span-5 flex justify-center lg:justify-end items-center">
-                  <div className="max-w-[460px] w-full h-[260px] sm:h-[285px] md:h-[310px] rounded-2xl bg-zinc-950 border border-zinc-800 p-6 flex flex-col justify-between items-center text-center relative shadow-2xl overflow-hidden group-hover:scale-[1.03] group-hover:border-zinc-500 transition-all duration-300 ease-out">
-                    {/* Grid */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-
-                    {/* Corner Accent Brackets */}
-                    <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-white" />
-                    <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-white" />
-                    <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-white" />
-                    <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-white" />
-
-                    {/* Top Tag */}
-                    <div className="w-full flex justify-between items-center text-[10px] font-mono text-zinc-400 z-10">
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        SYSTEM // PREVIEW
-                      </span>
-                      <span className="text-white font-semibold">VERIFIED ARCHITECTURE</span>
-                    </div>
-
-                    {/* Central Visual Icon */}
-                    <div className="relative my-auto z-10 flex flex-col items-center space-y-2">
-                      <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center group-hover:scale-110 group-hover:border-white transition-all duration-300 ease-out shadow-lg">
-                        {renderProjectIcon(project.id)}
-                      </div>
-                      <span className="mono-tag text-xs text-zinc-300 font-semibold tracking-wider group-hover:text-white transition-colors duration-300">
-                        {project.title.toUpperCase()}
-                      </span>
-                    </div>
-
-                    {/* Bottom Verification Label */}
-                    <div className="w-full pt-2 border-t border-zinc-800 text-[10px] font-mono text-zinc-400 flex items-center justify-between z-10">
-                      <span>STACK: INTEGRATED</span>
-                      <span className="text-white flex items-center gap-1">
-                        <ArrowUpRight className="w-3 h-3" /> ACTIVE NODE
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="projects" ref={sectionRef} className="projects-reference">
+      <div ref={headerRef} className="projects-heading">
+        <div><p className="projects-eyebrow"><span />02 // FEATURED ENGINEERING</p><h2 className="monochrome-gradient-text">PROJECTS</h2></div>
+        <p className="projects-description">A showcase of my work in AI/ML, web development, and real-world problem solving. Each project reflects my passion for building meaningful and impactful solutions.</p>
       </div>
+      <div className="projects-controls"><span>{githubProjects.length} projects · scroll to explore</span><div><button type="button" onClick={() => move(-1)} disabled={position.start} aria-label="Previous projects">←</button><button type="button" onClick={() => move(1)} disabled={position.end} aria-label="Next projects">→</button></div></div>
+      <div ref={cardsContainerRef} className="projects-track" onScroll={updatePosition} tabIndex={0} role="region" aria-label="Projects, scroll horizontally for more" onKeyDown={event => {
+        if (event.target !== event.currentTarget) return;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); }
+      }}>
+        {githubProjects.map(project => <article key={project.id} className="about-panel project-showcase-card">
+          <div className="project-category">{project.category}</div>
+          <ProjectPreview kind={project.preview} />
+          <h3>{project.title}</h3>
+          <p className="project-summary">{project.description}</p>
+          <div className="project-tech">{project.techStack.map(tech => <span key={tech}>{tech}</span>)}</div>
+          <div className="project-actions"><a href={project.liveUrl || project.githubUrl} target="_blank" rel="noopener noreferrer">{project.liveUrl ? 'VIEW LIVE' : 'VIEW CODE'}<ArrowRight size={20} /></a>{project.liveUrl && <a className="project-source" href={project.githubUrl} target="_blank" rel="noopener noreferrer">Source code ↗</a>}</div>
+        </article>)}
+      </div>
+      <div className="projects-bottom"><p><span />● MORE TO COME ●<span /></p><p>BUILDING TODAY FOR A SMARTER TOMORROW</p></div>
     </section>
   );
 };
-

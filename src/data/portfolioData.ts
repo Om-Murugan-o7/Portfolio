@@ -171,16 +171,23 @@ export const portfolioData: PortfolioData = {
       category: "Hackathons"
     },
     {
+      id: "ach-5",
+      number: "02",
+      title: "NATIONAL LEVEL HACKATHON FINALIST",
+      subtitle: "TSM Technova 2026",
+      category: "Hackathons"
+    },
+    {
       id: "ach-2",
-      number: "90+",
+      number: "100+",
       title: "CODECHEF PROBLEMS",
       subtitle: "Competitive Programming & Problem Solving",
       category: "Coding"
     },
     {
       id: "ach-3",
-      number: "470+",
-      title: "SKILLRACK PROBLEMS",
+      number: "70+",
+      title: "LEETCODE PROBLEMS",
       subtitle: "Algorithmic Challenges & Logic Building",
       category: "Coding"
     },

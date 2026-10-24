@@ -83,45 +83,41 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full h-20 z-40 transition-all duration-300 flex items-center ${
+      className={`portfolio-nav fixed top-0 left-0 w-full h-20 z-40 transition-all duration-300 flex items-center ${
         isScrolled
           ? 'bg-black/90 backdrop-blur-md border-b border-zinc-800/80 shadow-2xl'
           : 'bg-transparent'
       }`}
     >
-      <div className="site-container flex items-center justify-between">
+      <div className="home-nav-container flex items-center justify-between">
         {/* Left: Brand Name */}
         <button
           onClick={() => scrollToSection('home')}
-          className="group flex items-center space-x-2.5 text-left focus:outline-none"
+          className="group flex items-center gap-3 text-left focus:outline-none"
           aria-label="Scroll to Home"
         >
-          <span className="w-2 h-2 rounded-full bg-white group-hover:scale-125 transition-transform duration-300" />
+          <span className="w-2.5 h-2.5 rounded-full bg-white group-hover:scale-125 transition-transform duration-300 shrink-0" />
           <span className="font-extrabold tracking-wider text-base sm:text-lg md:text-xl text-white transition-colors duration-300">
             {portfolioData.personal.shortName}
           </span>
         </button>
 
         {/* Right: Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
+        <nav className="hidden md:flex items-center gap-3 sm:gap-4" aria-label="Main Navigation">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
+                aria-current={isActive ? 'page' : undefined}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative font-mono text-xs sm:text-sm font-semibold tracking-widest transition-colors duration-300 py-1 ${
-                  isActive ? 'text-white' : 'text-zinc-400 hover:text-white'
+                className={`home-nav-link px-3.5 py-2 transition-all duration-200 ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 {item.label}
-                {/* Active Indicator Underline (White) */}
-                {isActive && (
-                  <span
-                    className="absolute bottom-0 left-0 w-full h-[2px] bg-white rounded-full"
-                    style={{ animation: 'fadeIn 0.3s ease' }}
-                  />
-                )}
               </button>
             );
           })}
@@ -139,19 +135,22 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[80px] bg-black/95 backdrop-blur-xl border-b border-zinc-800 px-6 py-6 shadow-2xl flex flex-col space-y-5 animate-fadeIn">
+        <div className="md:hidden fixed inset-x-0 top-[80px] bg-black/95 backdrop-blur-xl border-b border-zinc-800 px-6 py-6 shadow-2xl flex flex-col space-y-4 animate-fadeIn">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
+                aria-current={isActive ? 'page' : undefined}
                 onClick={() => scrollToSection(item.id)}
-                className={`font-mono text-left text-base tracking-widest font-semibold py-2 transition-colors flex items-center justify-between ${
-                  isActive ? 'text-white' : 'text-zinc-400 hover:text-white'
+                className={`mobile-nav-link font-mono text-left text-sm tracking-widest font-semibold px-4 py-3 transition-colors flex items-center justify-between ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 <span>{item.label}</span>
-                {isActive && <span className="w-2 h-2 rounded-full bg-white" />}
+
               </button>
             );
           })}
